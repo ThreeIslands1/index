@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>m乗根n 計算ツール</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        input {
+            margin: 10px;
+            padding: 10px;
+            width: 80%;
+        }
+        button {
+            padding: 10px 20px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>m乗根n 計算ツール</h1>
+        <input type="number" id="m" placeholder="m (例: 3)" step="any">
+        <input type="number" id="n" placeholder="n (例: 27)" step="any">
+        <button onclick="calculate()">計算</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculate() {
+            const m = parseFloat(document.getElementById("m").value);
+            const n = parseFloat(document.getElementById("n").value);
+
+            if (isNaN(m) || isNaN(n)) {
+                document.getElementById("result").textContent = "有効な数値を入力してください。";
+                return;
+            }
+
+            if (m === 0) {
+                document.getElementById("result").textContent = "mは0以外の値を入力してください。";
+                return;
+            }
+
+            const result = Math.pow(n, 1 / m);
+            document.getElementById("result").textContent = `結果: ${result}`;
+        }
+    </script>
+</body>
+</html>
