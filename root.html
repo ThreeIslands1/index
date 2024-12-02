@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>m乗根n 計算ツール</title>
+    <!-- MathJaxの読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
-        /* 全体のスタイル */
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
@@ -79,31 +80,47 @@
 </head>
 <body>
     <div class="container">
-        <h1>m乗根n 計算ツール</h1>
+        <h1>m乗根n 計算ツール \(m\sqrt{n}\)</h1>
         <input type="number" id="m" placeholder="m (例: 3)" step="any">
         <input type="number" id="n" placeholder="n (例: 27)" step="any">
+        <input type="number" id="iterations" placeholder="モンテカルロ試行回数 (例: 100000)" step="1">
         <button onclick="calculate()">計算</button>
         <div class="result" id="result"></div>
-        <div class="footer">© 2024 ThreeIslands</div>
+        <div class="result" id="monteCarloResult"></div>
+        <div class="footer">© 2024 Your Name</div>
     </div>
 
     <script>
         function calculate() {
             const m = parseFloat(document.getElementById("m").value);
             const n = parseFloat(document.getElementById("n").value);
+            const iterations = parseInt(document.getElementById("iterations").value);
 
-            if (isNaN(m) || isNaN(n)) {
-                document.getElementById("result").textContent = "有効な数値を入力してください。";
+            if (isNaN(m) || isNaN(n) || isNaN(iterations) || m === 0 || iterations <= 0) {
+                document.getElementById("result").textContent = "有効な数値を入力してください (m ≠ 0, 試行回数 > 0)。";
                 return;
             }
 
-            if (m === 0) {
-                document.getElementById("result").textContent = "mは0以外の値を入力してください。";
-                return;
-            }
-
+            // 通常計算
             const result = Math.pow(n, 1 / m);
-            document.getElementById("result").textContent = `結果: ${result}`;
+            document.getElementById("result").textContent = `結果 (直接計算): ${result}`;
+
+            // モンテカルロ法で近似計算
+            const monteCarloResult = monteCarloRoot(m, n, iterations);
+            document.getElementById("monteCarloResult").textContent = `結果 (モンテカルロ法, 試行回数: ${iterations}): ${monteCarloResult}`;
+        }
+
+        function monteCarloRoot(m, n, iterations) {
+            let count = 0;
+            for (let i = 0; i < iterations; i++) {
+                // ランダムに 0 ~ n の範囲で値を取る
+                const x = Math.random() * n;
+                if (Math.pow(x, m) <= n) {
+                    count++;
+                }
+            }
+            // 近似値を返す
+            return Math.pow(n * (count / iterations), 1 / m);
         }
     </script>
 </body>
